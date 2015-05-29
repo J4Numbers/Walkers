@@ -2,8 +2,8 @@ __author__ = 'Cynical'
 
 import unittest
 
-from uk.co.j4numbers.walkers import configs
-from uk.co.j4numbers.walkers.reddit.RedditCrawler import RedditCrawler
+from walkers import configs
+from walkers import RedditCrawler
 
 
 class RedditCrawlerTest(unittest.TestCase):

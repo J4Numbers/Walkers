@@ -2,7 +2,7 @@ __author__ = 'Cynical'
 
 import imgurpython
 
-from uk.co.j4numbers.walkers import configs
+from walkers import configs
 
 
 class ImgurCrawler:
