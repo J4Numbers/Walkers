@@ -5,7 +5,7 @@ __auth__ = "https://oauth.reddit.com/"
 import requests
 import requests.auth
 
-from uk.co.m4numbers.walkers import configs
+from walkers import configs
 
 
 class RedditCrawler:
