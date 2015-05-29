@@ -16,7 +16,7 @@ class RedditCrawler:
     def __init__(self, username, password):
         client_auth = requests.auth.HTTPBasicAuth(configs.__reddit_client__, configs.__reddit_secret__)
         post_data = {"grant_type": "password", "username": username, "password": password}
-        headers = {"User-Agent": "other:uk.co.m4numbers.walkers:v0.0.1 (by /u/M477h3w1012)"}
+        headers = {"User-Agent": "other:walkers:v0.0.1 (by /u/M477h3w1012)"}
 
         res = requests.post(__base__, auth=client_auth, data=post_data, headers=headers)
 
