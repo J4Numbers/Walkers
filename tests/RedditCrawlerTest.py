@@ -3,7 +3,7 @@ __author__ = 'Cynical'
 import unittest
 
 from walkers import configs
-from walkers import RedditCrawler
+from walkers.reddit.RedditCrawler import RedditCrawler
 
 
 class RedditCrawlerTest(unittest.TestCase):
