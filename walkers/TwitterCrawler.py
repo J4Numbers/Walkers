@@ -14,3 +14,12 @@ class TwitterCrawler:
 
     def get_my_timeline(self):
         return self.api.home_timeline()
+
+    def get_my_tweets(self):
+        return self.api.user_timeline()
+
+    def get_my_last_tweet(self):
+        return self.api.user_timeline({'count':1})
+
+    def get_me(self):
+        return self.api.verify_credentials()
