@@ -1,4 +1,4 @@
-__author__ = 'Cynical'
+__author__ = 'J4Numbers'
 
 import unittest
 

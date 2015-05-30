@@ -1,4 +1,4 @@
-__author__ = 'Cynical'
+__author__ = 'J4Numbers'
 __base__ = "https://www.reddit.com/api/v1/access_token"
 __auth__ = "https://oauth.reddit.com/"
 
