@@ -12,3 +12,6 @@ __twitter_con_key__ = 'twitter_consumer_key'
 __twitter_con_secret__ = 'twitter_consumer_secret'
 __twitter_acc_token__ = 'twitter_access_token_public'
 __twitter_acc_secret__ = 'twitter_access_token_secret'
+
+__facebook_acc_token__ = 'facebook_access_token'
+__facebook_acc_secret__ = 'facebook_access_token_secret'
