@@ -28,4 +28,6 @@ go and solve.
 ##Why Walkers?
 
 No particular reason; maybe the observation that these APIs are basically zombies in that
-they mindlessly respond and act on what happens (a.k.a. Walkers)
+they mindlessly respond and act on what happens (a.k.a. Walkers)... Which actually works
+quite well considering that I'm naming each of these things 'crawlers' (being the walkers
+which are more passive than most)... Don't I have a nice collection of zombies :)
