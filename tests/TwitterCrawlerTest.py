@@ -1,7 +1,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-__author__ = 'Cynical'
+__author__ = 'Matthew Ball'
 
 import unittest
 
