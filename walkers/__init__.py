@@ -6,6 +6,7 @@ __license__ = 'Apache2'
 
 """ Related Imports """
 
+from walkers.FacebookCrawler import FacebookCrawler
 from walkers.ImgurCrawler import ImgurCrawler
 from walkers.RedditCrawler import RedditCrawler
 from walkers.TwitterCrawler import TwitterCrawler
