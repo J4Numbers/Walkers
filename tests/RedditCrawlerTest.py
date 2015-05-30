@@ -2,18 +2,23 @@ __author__ = 'Cynical'
 
 import unittest
 
-from walkers import configs
-from walkers.reddit.RedditCrawler import RedditCrawler
+from tests import configs
+from walkers.RedditCrawler import RedditCrawler
 
 
 class RedditCrawlerTest(unittest.TestCase):
 
     def setUp(self):
-        self.rc = RedditCrawler(configs.__username__, configs.__password__)
+        self.rc = RedditCrawler(
+            configs.__reddit_username__, configs.__reddit_password__
+        )
 
     def test_user(self):
         user = self.rc.request_profile()
-        self.assertEqual(user['name'], configs.__username__, "The names were not equal - incorrect login")
+        self.assertEqual(
+            user['name'], configs.__reddit_username__,
+            "The names were not equal - incorrect login"
+        )
 
     def test_subreddits(self):
         sbrds = self.rc.request_my_subreddits()

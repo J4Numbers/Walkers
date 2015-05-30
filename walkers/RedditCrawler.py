@@ -5,16 +5,14 @@ __auth__ = "https://oauth.reddit.com/"
 import requests
 import requests.auth
 
-from walkers import configs
-
 
 class RedditCrawler:
     """ A crawler class for the Reddit API """
 
     __headers = ""
 
-    def __init__(self, username, password):
-        client_auth = requests.auth.HTTPBasicAuth(configs.__reddit_client__, configs.__reddit_secret__)
+    def __init__(self, username, password, client, secret):
+        client_auth = requests.auth.HTTPBasicAuth(client, secret)
         post_data = {"grant_type": "password", "username": username, "password": password}
         headers = {"User-Agent": "other:walkers:v0.0.1 (by /u/M477h3w1012)"}
 
