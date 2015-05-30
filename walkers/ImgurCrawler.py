@@ -2,15 +2,13 @@ __author__ = 'Cynical'
 
 import imgurpython
 
-from walkers import configs
-
 
 class ImgurCrawler:
 
     __client = 0
 
-    def __init__(self, pin):
-        conn = imgurpython.ImgurClient(configs.__imgur_client__, configs.__imgur_secret__)
+    def __init__(self, client, secret, pin):
+        conn = imgurpython.ImgurClient(client, secret)
         auth_url = conn.get_auth_url('pin')
 
         creds = conn.authorize(pin, 'pin')

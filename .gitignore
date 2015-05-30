@@ -2,7 +2,7 @@
 # We don't want the ide directory jumping in the repo
 /.idea/
 #And configs should never be altered on the repo from defaults
-/walkers/configs.py
+/tests/configs.py
 
 ### Python template
 # Byte-compiled / optimized / DLL files
