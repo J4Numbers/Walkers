@@ -1,4 +1,4 @@
-__author__ = 'Cynical'
+__author__ = 'J4Numbers'
 
 __reddit_username__ = "reddit_username"
 __reddit_password__ = "reddit_password"
