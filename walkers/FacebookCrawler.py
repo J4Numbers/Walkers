@@ -16,7 +16,7 @@
 
 __author__ = 'Matthew Ball'
 
-import facebook
+"""import facebook
 
 
 class FacebookCrawler:
@@ -27,4 +27,6 @@ class FacebookCrawler:
 
     def get_my_posts(self):
         return self.graph.request("/v2.3/me/feed")
+
+        """
 
