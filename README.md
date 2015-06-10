@@ -17,6 +17,7 @@ and a few which are less so. So far, these include in no particular order:
  * Reddit
  * Imgur
  * Twitter
+ * Steam
 
 ##Note
 

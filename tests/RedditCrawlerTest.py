@@ -26,7 +26,8 @@ class RedditCrawlerTest(unittest.TestCase):
 
     def setUp(self):
         self.rc = RedditCrawler(
-            configs.__reddit_username__, configs.__reddit_password__
+            configs.__reddit_username__, configs.__reddit_password__,
+            configs.__reddit_client__, configs.__reddit_secret__
         )
 
     def test_user(self):

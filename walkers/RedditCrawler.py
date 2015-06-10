@@ -46,7 +46,7 @@ class RedditCrawler:
         return res.json()
 
     def request_comments(self, user):
-        res = requests.get(__auth__ + "/user/{0}/comments".format(user, headers=self.__headers))
+        res = requests.get(__auth__ + "/user/{0}/comments".format(user), headers=self.__headers)
         return res.json()
 
     def request_my_subreddits(self):
