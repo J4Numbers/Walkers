@@ -11,4 +11,5 @@ from walkers.ImgurCrawler import ImgurCrawler
 from walkers.RedditCrawler import RedditCrawler
 from walkers.SteamCrawler import SteamCrawler
 from walkers.TwitterCrawler import TwitterCrawler
+from walkers.WalkerExceptions import WalkerException
 from walkers.YouTubeCrawler import YouTubeCrawler

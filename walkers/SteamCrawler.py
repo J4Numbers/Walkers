@@ -16,49 +16,30 @@
 
 __author__ = 'Matthew Ball'
 
-__base__ = 'https://api.steampowered.com/{0}/{1}/v{2:04d}/'
+"""
+    These three locations all hold some significance when considering the Steam
+    web api. The base is very much the key factor in many of the queries that
+    will be performed on Steam's api, allowing for interfaces, methods, and versions
+    to be plugged and changed mercilessly.
 
+    The auth location is a link that will always be accessible to us and anyone else
+    trying to use this library, and it will return a list of all of our available
+    methods whenever it is prodded by us. Finally, the leaderboards location is a
+    tad on the legacy side, as Valve have not built in leaderboard functionality into
+    their steamworks api quite yet.
+"""
+__base__ = 'https://api.steampowered.com/{0}/{1}/v{2:04d}/'
 __auth__ = __base__.format('ISteamWebAPIUtil', 'GetSupportedAPIList', 1)
 __leaderboard__ = 'https://steamcommunity.com/stats/{0}/leaderboards/{1}/'
 
-__news__ = 'http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/' \
-           '?appid={0}&count={1}&maxlength={2}&format={3}'
-__g_ach__ = 'http://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/' \
-            '?gameid={0}&format={1}'
-__g_stats__ = 'http://api.steampowered.com/ISteamUserStats/GetGlobalStatsForGame/v0001/' \
-              '?appid={0}&count={1}&name[0]={2}&format={3}'
-__profile__ = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/' \
-              '?key={0}&steamids={1}&format={2}'
-__friends__ = 'http://api.steampowered.com/ISteamUser/GetFriendList/v0001/' \
-              '?key={0}&steamid={1}&relationship={2}&format={3}'
-__p_ach__ = 'http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/' \
-            '?key={0}&appid={1}&steamid={2}&format={3}'
-__p_stats__ = 'http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/' \
-              '?key={0}&appid={1}&steamid={2}&format={3}'
-__games__ = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/' \
-            '?key={0}&steamid={1}&format={2}'
-__r_games__ = 'http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/' \
-              '?key={0}&steamid={1}&format={2}'
-__shared__ = 'http://api.steampowered.com/IPlayerService/IsPlayingSharedGame/v0001/' \
-             '?key={0}&steamid={1}&appid_playing={2}&format={3}'
-__schema__ = 'http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/' \
-             '?key={0}&appid={1}&format={2}'
-__bans__ = 'http://api.steampowered.com/ISteamUser/GetPlayerBans/v1/' \
-           '?key={0}&steamids={1}&format={2}'
 
 import requests
 import xmltodict
 
+from walkers.WalkerExceptions import WalkerException
 
-class WalkerException(Exception):
-    def __init__(self, reason):
-        self.reason = reason
-
-    def __str__(self):
-        return repr(self.reason)
 
 class SteamCrawler:
-
     def __init__(self, apiKey=''):
         self.headers = {"User-Agent": "other:walkers:v0.0.1 (by /u/M477h3w1012)"}
         self.apiKey = apiKey
@@ -71,7 +52,7 @@ class SteamCrawler:
         self.interfaces = {}
         t_map = requests.get(__auth__, headers=self.headers, params=params).json()['apilist']['interfaces']
         for interface in t_map:
-            mtemp, temp, t, m = ({},)*4
+            mtemp, temp, t, m = ({},) * 4
             for method in interface['methods']:
                 t[method['version']] = method
                 temp.update(t)
