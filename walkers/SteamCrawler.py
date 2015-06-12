@@ -18,8 +18,8 @@ __author__ = 'Matthew Ball'
 
 __base__ = 'https://api.steampowered.com/{0}/{1}/v{2:04d}/'
 
-__auth__ = __base__.format('ISteamWebAPIUtil', 'GetSupportedAPIList', 1)+'?key={0}'
-__leaderboard__ = 'https://steamcommunity.com/stats/{0}/leaderboards/{1}/?xml=1'
+__auth__ = __base__.format('ISteamWebAPIUtil', 'GetSupportedAPIList', 1)
+__leaderboard__ = 'https://steamcommunity.com/stats/{0}/leaderboards/{1}/'
 
 __news__ = 'http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/' \
            '?appid={0}&count={1}&maxlength={2}&format={3}'
@@ -47,6 +47,7 @@ __bans__ = 'http://api.steampowered.com/ISteamUser/GetPlayerBans/v1/' \
            '?key={0}&steamids={1}&format={2}'
 
 import requests
+import xmltodict
 
 
 class WalkerException(Exception):
@@ -57,13 +58,18 @@ class WalkerException(Exception):
         return repr(self.reason)
 
 class SteamCrawler:
-    game = 0
 
-    def __init__(self, apiKey):
+    def __init__(self, apiKey=''):
         self.headers = {"User-Agent": "other:walkers:v0.0.1 (by /u/M477h3w1012)"}
         self.apiKey = apiKey
+        self.__buildInterfaces()
+
+    def __buildInterfaces(self):
+        params = {}
+        if self.apiKey != '':
+            params['key'] = self.apiKey
         self.interfaces = {}
-        t_map = requests.get(__auth__.format(apiKey), headers=self.headers).json()['apilist']['interfaces']
+        t_map = requests.get(__auth__, headers=self.headers, params=params).json()['apilist']['interfaces']
         for interface in t_map:
             mtemp, temp, t, m = ({},)*4
             for method in interface['methods']:
@@ -72,6 +78,10 @@ class SteamCrawler:
                 m[method['name']] = temp
                 mtemp.update(m)
             self.interfaces[interface['name']] = mtemp
+
+    def updateApiKey(self, apiKey):
+        self.apiKey = apiKey
+        self.__buildInterfaces()
 
     def checkAccess(self, interface, method, version):
         return \
@@ -113,23 +123,23 @@ class SteamCrawler:
                         else:
                             return ret.content
                     return ret.json()
+                else:
+                    raise Exception("Parameter set was incorrect for some reason")
+            else:
+                raise PermissionError("The interface and method combo you were trying to access"
+                                      " either didn't exist, or wasn't accessible to you"
+                                      )
         except:
             raise
 
     def getAvailableMethods(self):
         return self.interfaces
 
-    def assignGame(self, id):
-        self.game = id
+    def getMainLeaderboard(self, gameId):
+        res = requests.get(__leaderboard__.format(gameId, ""), headers=self.headers, params={'xml': 1})
+        return xmltodict.parse(res.content)
 
-    def getMainLeaderboard(self):
-        res = requests.get(__leaderboard__.format(self.game, ""), headers=self.headers)
-        return res.content
-
-    def getIndivLeaderboard(self, ind):
-        res = requests.get(__leaderboard__.format(self.game, ind), headers=self.headers)
-        return res.content
-
-    def getDataOnProfileId(self, profileId):
-        res = requests.get(__profile__.format(self.apiKey, profileId, 'json'), headers=self.headers)
-        return res.json()
+    def getIndivLeaderboard(self, gameId, ind, params):
+        params['xml'] = 1
+        res = requests.get(__leaderboard__.format(gameId, ind), headers=self.headers, params=params)
+        return xmltodict.parse(res.content)

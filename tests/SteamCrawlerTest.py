@@ -13,10 +13,10 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 """
+
 __author__ = 'Matthew Ball'
 
 import unittest
-import xml.etree.ElementTree as ET
 
 from tests import configs
 from walkers.SteamCrawler import SteamCrawler, WalkerException
@@ -26,14 +26,38 @@ class SteamCrawlerTest(unittest.TestCase):
 
     def setUp(self):
         self.sc = SteamCrawler(configs.__steam_api_key__)
+        self.sc_no_api = SteamCrawler()
+
+    def testPermissionsOnNoKey(self):
+        try:
+            self.sc_no_api.accessSteam(
+                'ISteamUser', 'GetPlayerSummaries', 2,
+                {'steamids': configs.__steam_test_profile__}
+            )
+        except PermissionError:
+            self.assertEqual(1, 1, 'A permission error was thrown! Hurray!')
+        except:
+            self.fail('Something else was thrown that shouldn\'t have been')
+        else:
+            self.fail('The thing didn\'t fail... Which, by the way, it should have')
 
     def testGetMethods(self):
         self.assertEqual(50, len(self.sc.getAvailableMethods()), "Not enough interfaces were returned")
 
     def testGetMainLeaderboard(self):
-        self.sc.assignGame(247080)
-        et = ET.fromstring(self.sc.getMainLeaderboard())
-        print(et)
+        self.assertEqual(
+            247080, int(self.sc.getMainLeaderboard(247080)['response']['appID']),
+            "The wrong store application's leaderboard was recovered"
+        )
+
+    def testGetTopTenLeaderboard(self):
+        json = self.sc.getMainLeaderboard(242680)
+        second = self.sc.getIndivLeaderboard(
+            242680,
+            json['response']['leaderboard'][int(json['response']['leaderboardCount'])-1]['lbid'],
+            {'start': 1, 'end': 10}
+        )
+        self.assertEqual(10, len(second['response']['entries']['entry']), 'Inequality in test results')
 
     def testGetProfile(self):
         res = self.sc.accessSteam('ISteamUser', 'GetPlayerSummaries', 2, {'steamids': configs.__steam_test_profile__})
@@ -42,10 +66,20 @@ class SteamCrawlerTest(unittest.TestCase):
             "Slight issue in the fact that we don't have the right person"
         )
 
-    def testFailGetProfile(self):
+    def testFailInterfaceGetProfile(self):
+        try:
+            self.sc.accessSteam('gibberish', 'moregibberish', 0, {})
+        except PermissionError:
+            self.assertEqual(1, 1, "The exception was triggered correctly")
+        except:
+            self.fail("The wrong exception was thrown")
+        else:
+            self.fail("This failing test did not actually fail")
+
+    def testFailParamsGetProfile(self):
         try:
             self.sc.accessSteam('ISteamUser', 'GetPlayerSummaries', 2, {})
-        except WalkerException as e:
+        except WalkerException:
             self.assertEqual(1, 1, "We failed correctly")
         except:
             self.fail("The wrong exception was thrown")
