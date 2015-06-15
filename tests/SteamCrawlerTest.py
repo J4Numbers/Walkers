@@ -22,17 +22,16 @@ from tests import configs
 from walkers.SteamCrawler import SteamCrawler
 from walkers.WalkerExceptions import WalkerException
 
-"""
-    Depending on the level of debug you require, alter the number
-    below so that it reflects what you wish to be shown in the tests
-    as some of them may fail due to timeout if too many tests are
-    ran at the same time.
+# Depending on the level of debug you require, alter the number
+# below so that it reflects what you wish to be shown in the tests
+# as some of them may fail due to timeout if too many tests are
+# ran at the same time.
+#
+# 0 - This is a full debug run of all tests
+# 1 - This is a run of a few of the tests: mainly the more intensive ones
+# 2 - This is a run of most of the tests, consisting of many of the less-
+#     intensive tests in this file
 
-    0 - This is a full debug run of all tests
-    1 - This is a run of a few of the tests: mainly the more intensive ones
-    2 - This is a run of most of the tests, consisting of many of the less-
-        intensive tests in this file
-"""
 __debug_key__ = 0
 
 class SteamCrawlerTest(unittest.TestCase):
@@ -41,14 +40,19 @@ class SteamCrawlerTest(unittest.TestCase):
         self.sc = SteamCrawler(configs.__steam_api_key__)
         self.sc_no_api = SteamCrawler()
 
-    """
+    @unittest.skipIf(__debug_key__ == 1, "Testing Permissions with no API key has been skipped for this run.")
+    def testPermissionsOnNoKey(self):
+        """
         This method tests whether or not we are able to get through to the
         web api when we are accessing a valid interface, but one which we
         do not have the permissions to access; I.E. the Player Summaries
         interface, which requires a valid API Key to be used.
-    """
-    @unittest.skipIf(__debug_key__ == 1, "Testing Permissions with no API key has been skipped for this run.")
-    def testPermissionsOnNoKey(self):
+
+        The desired behaviour for this method is that a PermissionError is
+        thrown when we try to access a method for which we do not have
+        permission to access (without an api key)
+        """
+
         try:
             self.sc_no_api.accessSteam(
                 'ISteamUser', 'GetPlayerSummaries', 2,
@@ -61,14 +65,15 @@ class SteamCrawlerTest(unittest.TestCase):
         else:
             self.fail('The thing didn\'t fail... Which, by the way, it should have')
 
-    """
+    @unittest.skipIf(__debug_key__ == 1, "Testing the number of methods returned has been skipped for this run.")
+    def testGetMethods(self):
+        """
         This method tests the number of methods we have available to us as a
         valid api key holder. This may change for those people accessing it,
         but at the current time, with a brand new api key, there are 50 interfaces
         to which I can claim access.
-    """
-    @unittest.skipIf(__debug_key__ == 1, "Testing the number of methods returned has been skipped for this run.")
-    def testGetMethods(self):
+        """
+
         self.assertEqual(50, len(self.sc.getAvailableMethods()), "Not enough interfaces were returned")
 
     @unittest.skipIf(__debug_key__ == 2, "Testing a fetch of the main leaderboard has been skipped for this run")
@@ -82,14 +87,14 @@ class SteamCrawlerTest(unittest.TestCase):
                                          "been skipped for this run")
     def testGetTopTenLeaderboard(self):
         json = self.sc.getMainLeaderboard(242680)
-        second = self.sc.getIndivLeaderboard(
+        second = self.sc.getIndividualLeaderboard(
             242680,
             json['response']['leaderboard'][int(json['response']['leaderboardCount'])-1]['lbid'],
             {'start': 1, 'end': 10}
         )
         self.assertEqual(10, len(second['response']['entries']['entry']), 'Inequality in test results')
 
-    @unittest.skip("Reasons")
+    @unittest.skipIf(__debug_key__ == 1, "Accessing a single profile has been skipped for this run")
     def testGetProfile(self):
         res = self.sc.accessSteam('ISteamUser', 'GetPlayerSummaries', 2, {'steamids': configs.__steam_test_profile__})
         self.assertEqual(

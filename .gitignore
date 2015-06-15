@@ -1,6 +1,7 @@
 ### Custom ignores
 # We don't want the ide directory jumping in the repo
 /.idea/
+/api_examples/
 
 ### Python template
 # Byte-compiled / optimized / DLL files
